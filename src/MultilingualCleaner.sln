@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Community.MultilingualCleaner", "Umbraco.Community.MultilingualCleaner\Umbraco.Community.MultilingualCleaner.csproj", "{9CF3030D-CF53-45C8-B523-E116EBAE6328}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "mockup", "..\..\b2bconnect\dev\mockup\", "{FF2D827D-B255-41D1-A2E3-24425294A0C3}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_62312"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\b2bconnect\dev\mockup\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_62312\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_62312"
+		Release.AspNetCompiler.PhysicalPath = "..\..\b2bconnect\dev\mockup\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_62312\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "62312"
+		SlnRelativePath = "..\..\b2bconnect\dev\mockup\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9CF3030D-CF53-45C8-B523-E116EBAE6328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CF3030D-CF53-45C8-B523-E116EBAE6328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CF3030D-CF53-45C8-B523-E116EBAE6328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CF3030D-CF53-45C8-B523-E116EBAE6328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF2D827D-B255-41D1-A2E3-24425294A0C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF2D827D-B255-41D1-A2E3-24425294A0C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF2D827D-B255-41D1-A2E3-24425294A0C3}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF2D827D-B255-41D1-A2E3-24425294A0C3}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4D71B12D-4F62-4F2C-B786-46336948947F}
+	EndGlobalSection
+EndGlobal
