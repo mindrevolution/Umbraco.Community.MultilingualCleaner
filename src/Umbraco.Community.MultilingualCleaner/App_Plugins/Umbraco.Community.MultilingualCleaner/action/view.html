@@ -1,0 +1,87 @@
+﻿<div ng-controller="Umbraco.Community.MultilingualCleaner.Action.Controller as vm">
+    <form name="MultilingualCleanerAction" novalidate>
+
+        <umb-editor-view>
+
+            <umb-panel>
+
+                <umb-pane>
+                    <p class="umb-alert umb-alert--warning" ng-show="!vm.hasVariants" aria-hidden="false">
+                        This nodes doesn't have any variants.
+                    </p>
+                    <p class="umb-alert umb-alert--warning" ng-show="vm.hasVariants" aria-hidden="false">
+                        This will remove the selected language variants from this node (and sub-nodes if requested).
+                    </p>
+                </umb-pane>
+
+                <umb-pane ng-show="vm.hasVariants && !vm.processing">
+                    <h5 class="umb-pane-title">Unpublish after clearing the property data?</h5>
+                    <umb-pane>
+                        <umb-toggle checked="vm.clearAndUnpublish"
+                                    on-click="vm.toggleClear()"
+                                    show-labels="true"
+                                    label-on="Clear values"
+                                    label-off="Clear values and unpublish"
+                                    label-position="right">
+                        </umb-toggle>
+                    </umb-pane>
+
+                    <h5 class="umb-pane-title">Include subnodes?</h5>
+                    <umb-pane>
+                        <umb-toggle checked="vm.recursive"
+                                    on-click="vm.toggleRecursive()"
+                                    show-labels="true"
+                                    label-on="Yes, include all subnodes"
+                                    label-off="No, just this node"
+                                    label-position="right">
+                        </umb-toggle>
+                    </umb-pane>
+
+
+                    <h5 class="umb-pane-title">Language variants</h5>
+                    <p class="abstract">Please select which languages variants should be processed.</p>
+                    <umb-pane class="umb-scrollable">
+                        <umb-checkbox ng-repeat="(key, value) in vm.variants"
+                                      name="variant"
+                                      value="{{key}}"
+                                      model="value.selected"
+                                      text="{{value.variant.displayName}}">
+                        </umb-checkbox>
+                    </umb-pane>
+
+                </umb-pane>
+
+                <umb-pane ng-show="vm.processing || vm.done">
+                    <umb-progress-bar percentage="vm.progress" size="m"></umb-progress-bar>
+                </umb-pane>
+
+            </umb-panel>
+
+            <umb-editor-footer>
+                <div class="btn-toolbar umb-btn-toolbar">
+                    <a class="btn btn-link" ng-click="vm.closeDialog()" ng-show="!vm.processing && !vm.done">
+                        <localize key="general_cancel">Cancel</localize>
+                    </a>
+
+                    <umb-button action="vm.processNode()"
+                                type="button"
+                                button-style="action"
+                                state="vm.buttonState"
+                                label="Process"
+                                disabled="vm.buttonState === 'busy' || vm.processing"
+                                ng-show="!vm.done && vm.hasVariants">
+                    </umb-button>
+
+                    <umb-button action="vm.closeDialog()"
+                                type="button"
+                                button-style="primary"
+                                label="Close"
+                                ng-show="!vm.processing && vm.done">
+                    </umb-button>
+                </div>
+            </umb-editor-footer>
+
+        </umb-editor-view>
+
+    </form>
+</div>
