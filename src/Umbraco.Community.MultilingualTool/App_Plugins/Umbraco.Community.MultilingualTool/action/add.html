@@ -19,7 +19,7 @@
 
                     <h5 class="umb-pane-title">Language variants</h5>
                     <p class="abstract">Please select which languages variants should be created.</p>
-                    <umb-pane class="umb-scrollable">
+                    <umb-pane>
                         <umb-checkbox ng-repeat="(key, value) in vm.variants"
                                       name="variant"
                                       value="{{key}}"
@@ -55,7 +55,7 @@
                                 type="button"
                                 button-style="primary"
                                 label="Close"
-                                ng-show="!vm.processing && vm.done">
+                                ng-show="!vm.processing || vm.done">
                     </umb-button>
                 </div>
             </umb-editor-footer>

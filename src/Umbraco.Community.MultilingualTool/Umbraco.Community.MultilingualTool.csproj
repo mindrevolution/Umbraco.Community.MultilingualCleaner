@@ -7,8 +7,8 @@
     <ProjectGuid>{9CF3030D-CF53-45C8-B523-E116EBAE6328}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Umbraco.Community.MultilingualCleaner</RootNamespace>
-    <AssemblyName>Umbraco.Community.MultilingualCleaner</AssemblyName>
+    <RootNamespace>Umbraco.Community.MultilingualTool</RootNamespace>
+    <AssemblyName>Umbraco.Community.MultilingualTool</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -32,7 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Umbraco.Community.MultilingualCleaner.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Umbraco.Community.MultilingualTool.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
