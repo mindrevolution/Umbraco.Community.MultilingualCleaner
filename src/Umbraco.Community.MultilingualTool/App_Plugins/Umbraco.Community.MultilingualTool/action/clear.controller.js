@@ -179,12 +179,18 @@
                                         .then(function (content) {
                                             vm.progressItemProcessed();
                                             console.debug("unpublished content", nodeId);
+                                        }, function (err) {
+                                            vm.progressItemProcessed();
+                                            console.error("unpublish failed", err, nodeId);
                                         });
                                 } else {
                                     contentResource.publishById(nodeId)
                                         .then(function (content) {
                                             vm.progressItemProcessed();
                                             console.debug("published content", nodeId);
+                                        }, function (err) {
+                                            vm.progressItemProcessed();
+                                            console.error("publish failed", err, nodeId);
                                         });
                                 }
                             });

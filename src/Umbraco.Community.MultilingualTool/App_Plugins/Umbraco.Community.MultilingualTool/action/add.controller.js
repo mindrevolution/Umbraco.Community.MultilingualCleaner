@@ -163,6 +163,9 @@
                                     .then(function (content) {
                                         vm.progressItemProcessed();
                                         console.debug("published content", nodeId);
+                                    }, function (err) {
+                                        vm.progressItemProcessed();
+                                        console.error("publish failed", err, nodeId);
                                     });
                             });
                     } else {
