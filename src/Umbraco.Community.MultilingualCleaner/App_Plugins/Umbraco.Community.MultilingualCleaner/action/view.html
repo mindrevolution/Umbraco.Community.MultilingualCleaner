@@ -7,21 +7,21 @@
 
                 <umb-pane>
                     <p class="umb-alert umb-alert--warning" ng-show="!vm.hasVariants" aria-hidden="false">
-                        This nodes doesn't have any variants.
+                        This nodes seems to not have any variants. You can process it's subnodes, though.
                     </p>
                     <p class="umb-alert umb-alert--warning" ng-show="vm.hasVariants" aria-hidden="false">
-                        This will remove the selected language variants from this node (and sub-nodes if requested).
+                        This will clear the selected language variants' values from this node (and sub-nodes if requested).
                     </p>
                 </umb-pane>
 
-                <umb-pane ng-show="vm.hasVariants && !vm.processing">
+                <umb-pane ng-show="!vm.processing">
                     <h5 class="umb-pane-title">Unpublish after clearing the property data?</h5>
                     <umb-pane>
                         <umb-toggle checked="vm.clearAndUnpublish"
                                     on-click="vm.toggleClear()"
                                     show-labels="true"
-                                    label-on="Clear values"
-                                    label-off="Clear values and unpublish"
+                                    label-on="Clear values and unpublish"
+                                    label-off="Clear values"
                                     label-position="right">
                         </umb-toggle>
                     </umb-pane>
@@ -39,13 +39,13 @@
 
 
                     <h5 class="umb-pane-title">Language variants</h5>
-                    <p class="abstract">Please select which languages variants should be processed.</p>
+                    <p class="abstract">Please select which languages variants should be cleared.</p>
                     <umb-pane class="umb-scrollable">
                         <umb-checkbox ng-repeat="(key, value) in vm.variants"
                                       name="variant"
                                       value="{{key}}"
                                       model="value.selected"
-                                      text="{{value.variant.displayName}}">
+                                      text="{{value.name}}">
                         </umb-checkbox>
                     </umb-pane>
 
@@ -69,7 +69,7 @@
                                 state="vm.buttonState"
                                 label="Process"
                                 disabled="vm.buttonState === 'busy' || vm.processing"
-                                ng-show="!vm.done && vm.hasVariants">
+                                ng-show="!vm.done">
                     </umb-button>
 
                     <umb-button action="vm.closeDialog()"

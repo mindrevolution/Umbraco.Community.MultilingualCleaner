@@ -26,15 +26,36 @@
 
                 // - build settings list
                 angular.forEach(_variants, function (value, key) {
-                    // - only add variants that were actually created
-                    if (value.state !== "NotCreated") {
-                        vm.variants.push({
-                            key: value.language.culture,
-                            selected: false,
-                            variant: value
-                        });
+                    //// - only add variants that were actually created
+                    //if (value.state !== "NotCreated") {
+                    //    vm.variants.push({
+                    //        key: value.language.culture,
+                    //        selected: false,
+                    //        variant: value
+                    //    });
+                    //}
+
+                    var variantState = " ⚬ " + value.state;
+                    var variant = {
+                        key: value.language.culture,
+                        name: "",
+                        selected: false,
+                        variant: value
                     }
+                    if (value.displayName) {
+                        variant.name = value.displayName + variantState;
+                    }
+                    if (value.language.displayName) {
+                        variant.name = value.language.displayName + variantState;
+                    }
+                    if (value.language.name) {
+                        variant.name = value.language.name + variantState;
+                    }
+                    vm.variants.push(variant);
                 });
+            } else {
+                // - no variants on node? make it recursive by default!
+                vm.recursive = true;
             }
         });
 
@@ -87,7 +108,7 @@
 
         vm.progressItemProcessed = function () {
             vm.progressItems++;
-            vm.progress = 100 / vm.progressItemsTotal * vm.progressItems;
+            vm.progress = Math.round(100 / vm.progressItemsTotal * vm.progressItems);
             console.log("progress now at", vm.progress);
         }
 
@@ -97,7 +118,7 @@
             multilingualcleanerResource.getDescendantIds(nodeId).then(function (response) {
                 nodesList = response;
                 vm.progressItemsTotal = nodesList.length;
-                console.log("multilingualcleanerResource", nodesList);
+                //console.log("multilingualcleanerResource", nodesList);
 
                 angular.forEach(nodesList, function (node, key) {
                     vm.clearNode(node, cultures, unpublish);
@@ -106,16 +127,18 @@
         }
 
         vm.clearNode = function (nodeId, cultures, unpublish) {
-            console.log("clear node", nodeId, cultures, "unpublish:" + unpublish);
+            var doSave = false;
+
+            //console.log("clear node", nodeId, cultures, "unpublish:" + unpublish);
 
             // - fetch node and clear it then
             contentResource.getById(nodeId)
                 .then(function (content) {
-                    console.log("contentResource", content);
+                    //console.log("contentResource", content);
 
                     angular.forEach(content.variants, function (variant, index) {
-                        // - only act on selected languages
-                        if (cultures.includes(variant.language.culture)) {
+                        // - only act on selected languages and only if variant was ever created
+                        if (cultures.includes(variant.language.culture) && variant.state !== "NotCreated") {
 
                             angular.forEach(variant.tabs, function (tab, index) {
 
@@ -130,28 +153,33 @@
 
                             // - flag to save updated variant later
                             variant.save = true;
+                            doSave = true;
                         }
                     });
 
                     // - save node (updated variants)
-                    contentResource.save(content, false, [], false)
-                        .then(function (content) {
-                            console.log("saved content", content);
-                            // - now publish OR unpublish this node
-                            // - (yes, two step process here!)
-                            if (unpublish) {
-                                contentResource.unpublish(nodeId)
-                                    .then(function (content) {
-                                        console.log("unpublished content", nodeId);
-                                    });
-                            } else {
-                                contentResource.publishById(nodeId)
-                                    .then(function (content) {
-                                        console.log("published content", nodeId);
-                                    });
-                            }
-                        });
+                    if (doSave) {
+                        contentResource.save(content, false, [], false)
+                            .then(function (content) {
+                                //console.log("saved content", content);
 
+                                // - now publish OR unpublish this node
+                                // - (yes, two step process here!)
+                                if (unpublish) {
+                                    contentResource.unpublish(nodeId)
+                                        .then(function (content) {
+                                            vm.progressItemProcessed();
+                                            console.log("unpublished content", nodeId);
+                                        });
+                                } else {
+                                    contentResource.publishById(nodeId)
+                                        .then(function (content) {
+                                            vm.progressItemProcessed();
+                                            console.log("published content", nodeId);
+                                        });
+                                }
+                            });
+                    }
                 });
         };
     }
