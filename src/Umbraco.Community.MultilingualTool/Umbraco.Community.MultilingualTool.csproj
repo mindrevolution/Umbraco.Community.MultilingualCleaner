@@ -127,8 +127,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="App_Plugins\Umbraco.Community.MultilingualTool\action\add.controller.js" />
     <Content Include="App_Plugins\Umbraco.Community.MultilingualTool\action\clear.controller.js" />
     <Content Include="App_Plugins\Umbraco.Community.MultilingualTool\action\clear.html" />
+    <Content Include="App_Plugins\Umbraco.Community.MultilingualTool\action\add.html" />
     <Content Include="App_Plugins\Umbraco.Community.MultilingualTool\resource.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

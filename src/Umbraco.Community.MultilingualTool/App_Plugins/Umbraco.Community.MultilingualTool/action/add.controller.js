@@ -7,7 +7,6 @@
         vm.variants = [];
         vm.buttonState = "init";
         vm.processing = false;
-        vm.clearAndUnpublish = false;
         vm.recursive = false;
         vm.progress = 0;
         vm.progressItems = 0;
@@ -26,15 +25,6 @@
 
                 // - build settings list
                 angular.forEach(_variants, function (value, key) {
-                    //// - only add variants that were actually created
-                    //if (value.state !== "NotCreated") {
-                    //    vm.variants.push({
-                    //        key: value.language.culture,
-                    //        selected: false,
-                    //        variant: value
-                    //    });
-                    //}
-
                     var variantState = " ⚬ " + value.state;
                     var variant = {
                         key: value.language.culture,
@@ -58,14 +48,6 @@
                 vm.recursive = true;
             }
         });
-
-        vm.toggleClear = function () {
-            if (vm.clearAndUnpublish) {
-                vm.clearAndUnpublish = false;
-                return;
-            }
-            vm.clearAndUnpublish = true;
-        }
 
         vm.toggleRecursive = function () {
             if (vm.recursive) {
@@ -94,10 +76,11 @@
 
             if (!vm.recursive) {
                 // - just this node ... easy! :)
-                vm.clearNode(vm.nodeId, _cultures, vm.clearAndUnpublish)
+                vm.progressReset(1);
+                vm.createVariants(vm.nodeId, _cultures)
             } else {
                 // - recursive
-                vm.clearNodeWithDescendants(vm.nodeId, _cultures, vm.clearAndUnpublish)
+                vm.createVariantsRecursive(vm.nodeId, _cultures)
             }
 
             // - release UI
@@ -120,39 +103,41 @@
             vm.progress = 0;
         }
 
-        vm.clearNodeWithDescendants = function (nodeId, cultures, unpublish) {
+        vm.createVariantsRecursive = function (nodeId, cultures) {
             var nodesList = [];
 
             multilingualtoolResource.getDescendantIds(nodeId).then(function (response) {
                 nodesList = response;
+                //console.log("multilingualtoolResource", nodesList, vm.progressItemsTotal + " progress items", vm.progressItems);
 
                 vm.progressReset(nodesList.length);
-                //console.log("multilingualtoolResource", nodesList);
-
+                    
                 angular.forEach(nodesList, function (node, key) {
-                    vm.clearNode(node, cultures, unpublish);
+                    vm.createVariants(node, cultures);
                 });
             });
         }
 
-        vm.clearNode = function (nodeId, cultures, unpublish) {
+        vm.createVariants = function (nodeId, cultures) {
             var doSave = false;
 
-            //console.log("clear node", nodeId, cultures, "unpublish:" + unpublish);
+            console.debug("create variant", nodeId, cultures);
 
-            // - fetch node and clear it then
+            // - fetch node and add new variants
             contentResource.getById(nodeId)
                 .then(function (content) {
                     //console.log("contentResource", content);
 
                     angular.forEach(content.variants, function (variant, index) {
-                        // - only act on selected languages and only if variant was ever created
-                        if (cultures.includes(variant.language.culture) && variant.state !== "NotCreated") {
+                        // - only act on selected languages and only if variant does not exist
+                        if (cultures.includes(variant.language.culture) && variant.state === "NotCreated") {
+
+                            variant.name = content.variants[0].name;
 
                             angular.forEach(variant.tabs, function (tab, index) {
 
                                 angular.forEach(tab.properties, function (prop, index) {
-                                    // - we can only clean non-mandatory values
+                                    // - we can only add non-mandatory values
                                     if (!prop.readonly && !prop.validation.mandatory) {
                                         prop.value = null;
                                     }
@@ -174,19 +159,11 @@
 
                                 // - now publish OR unpublish this node
                                 // - (yes, two step process here!)
-                                if (unpublish) {
-                                    contentResource.unpublish(nodeId)
-                                        .then(function (content) {
-                                            vm.progressItemProcessed();
-                                            console.debug("unpublished content", nodeId);
-                                        });
-                                } else {
-                                    contentResource.publishById(nodeId)
-                                        .then(function (content) {
-                                            vm.progressItemProcessed();
-                                            console.debug("published content", nodeId);
-                                        });
-                                }
+                                contentResource.publishById(nodeId)
+                                    .then(function (content) {
+                                        vm.progressItemProcessed();
+                                        console.debug("published content", nodeId);
+                                    });
                             });
                     } else {
                         // - we're done with that anyways :)
@@ -196,5 +173,5 @@
         };
     }
  
-    angular.module("umbraco").controller("Umbraco.Community.MultilingualTool.Action.ClearController", Controller);
+    angular.module("umbraco").controller("Umbraco.Community.MultilingualTool.Action.AddController", Controller);
 })();

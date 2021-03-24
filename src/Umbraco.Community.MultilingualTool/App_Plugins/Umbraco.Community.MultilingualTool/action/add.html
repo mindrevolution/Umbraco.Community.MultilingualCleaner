@@ -1,31 +1,11 @@
-﻿<div ng-controller="Umbraco.Community.MultilingualTool.Action.ClearController as vm">
-    <form name="MultilingualToolActionClear" novalidate>
+﻿<div ng-controller="Umbraco.Community.MultilingualTool.Action.AddController as vm">
+    <form name="MultilingualToolActionAdd" novalidate>
 
         <umb-editor-view>
 
             <umb-panel>
 
-                <umb-pane>
-                    <p class="umb-alert umb-alert--warning" ng-show="!vm.hasVariants" aria-hidden="false">
-                        This nodes seems to not have any variants. You can process it's subnodes, though.
-                    </p>
-                    <p class="umb-alert umb-alert--warning" ng-show="vm.hasVariants" aria-hidden="false">
-                        This will clear the selected language variants' values from this node (and sub-nodes if requested).
-                    </p>
-                </umb-pane>
-
                 <umb-pane ng-show="!vm.processing">
-                    <h5 class="umb-pane-title">Unpublish after clearing the property data?</h5>
-                    <umb-pane>
-                        <umb-toggle checked="vm.clearAndUnpublish"
-                                    on-click="vm.toggleClear()"
-                                    show-labels="true"
-                                    label-on="Clear values and unpublish"
-                                    label-off="Clear values"
-                                    label-position="right">
-                        </umb-toggle>
-                    </umb-pane>
-
                     <h5 class="umb-pane-title">Include subnodes?</h5>
                     <umb-pane>
                         <umb-toggle checked="vm.recursive"
@@ -37,9 +17,8 @@
                         </umb-toggle>
                     </umb-pane>
 
-
                     <h5 class="umb-pane-title">Language variants</h5>
-                    <p class="abstract">Please select which languages variants should be cleared.</p>
+                    <p class="abstract">Please select which languages variants should be created.</p>
                     <umb-pane class="umb-scrollable">
                         <umb-checkbox ng-repeat="(key, value) in vm.variants"
                                       name="variant"
@@ -67,7 +46,7 @@
                                 type="button"
                                 button-style="action"
                                 state="vm.buttonState"
-                                label="Clear variants"
+                                label="Add variants"
                                 disabled="vm.buttonState === 'busy' || vm.processing"
                                 ng-show="vm.hasVariants && !vm.done">
                     </umb-button>

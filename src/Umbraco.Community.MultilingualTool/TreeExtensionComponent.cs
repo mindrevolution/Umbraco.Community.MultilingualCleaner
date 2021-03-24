@@ -28,22 +28,21 @@ namespace Umbraco.Community.MultilingualTool
                 //&& sender.Security.CurrentUser.Groups.Any(x => x.Alias.InvariantEquals("admin"))
                 && permissions.Any(x => x.AssignedPermissions.Contains(ActionUpdate.ActionLetter.ToString())) )
             {
-                // creates a action menu item for CLEAR
-                var c = new Umbraco.Web.Models.Trees.MenuItem("multilingualToolClear", "Clear language variants...");
-                c.AdditionalData.Add("actionView", "/App_Plugins/Umbraco.Community.multilingualTool/action/clear.html");
-                c.Icon = "defrag";
-                int idx = e.Menu.Items.FindIndex(x => x.Alias.Equals("assignDomain", System.StringComparison.InvariantCultureIgnoreCase));
-                if (idx == -1)
-                    idx = 6;
-                e.Menu.Items.Insert(idx+1, c);
-
                 // creates a action menu item for ADD
                 var a = new Umbraco.Web.Models.Trees.MenuItem("multilingualToolAdd", "Add language variants...");
                 a.AdditionalData.Add("actionView", "/App_Plugins/Umbraco.Community.multilingualTool/action/add.html");
-                a.Icon = "defrag";
-                idx++;
+                a.Icon = "split-alt";
+                int idx = e.Menu.Items.FindIndex(x => x.Alias.Equals("assignDomain", System.StringComparison.InvariantCultureIgnoreCase));
+                if (idx == -1)
+                    idx = 6;
                 e.Menu.Items.Insert(idx + 1, a);
 
+                // creates a action menu item for CLEAR
+                var c = new Umbraco.Web.Models.Trees.MenuItem("multilingualToolClear", "Clear language variants...");
+                c.AdditionalData.Add("actionView", "/App_Plugins/Umbraco.Community.multilingualTool/action/clear.html");
+                c.Icon = "filter-arrows";
+                idx++;
+                e.Menu.Items.Insert(idx + 1, c);
             }
         }
 

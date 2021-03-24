@@ -1,6 +1,7 @@
 ﻿{
   "javascript": [
     "~/App_Plugins/Umbraco.Community.MultilingualTool/resource.js",
-    "~/App_Plugins/Umbraco.Community.MultilingualTool/action/clear.controller.js"
+    "~/App_Plugins/Umbraco.Community.MultilingualTool/action/clear.controller.js",
+    "~/App_Plugins/Umbraco.Community.MultilingualTool/action/add.controller.js"
   ]
 }
