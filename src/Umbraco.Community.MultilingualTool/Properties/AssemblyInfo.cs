@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Umbraco.Community.MultilingualCleaner")]
+[assembly: AssemblyTitle("Umbraco.Community.MultilingualTool")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("mindrevolution.com")]
-[assembly: AssemblyProduct("Umbraco.Community.MultilingualCleaner")]
+[assembly: AssemblyProduct("Umbraco.Community.MultilingualTool")]
 [assembly: AssemblyCopyright("Copyright © mindrevolution 2021")]
 [assembly: AssemblyTrademark("mindrevolution is a registered trademark")]
 [assembly: AssemblyCulture("")]

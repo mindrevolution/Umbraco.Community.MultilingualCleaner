@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Community.MultilingualCleaner", "Umbraco.Community.MultilingualCleaner\Umbraco.Community.MultilingualCleaner.csproj", "{9CF3030D-CF53-45C8-B523-E116EBAE6328}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Community.MultilingualTool", "Umbraco.Community.MultilingualTool\Umbraco.Community.MultilingualTool.csproj", "{9CF3030D-CF53-45C8-B523-E116EBAE6328}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "mockup", "..\..\b2bconnect\dev\mockup\", "{FF2D827D-B255-41D1-A2E3-24425294A0C3}"
 	ProjectSection(WebsiteProperties) = preProject

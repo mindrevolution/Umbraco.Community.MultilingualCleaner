@@ -6,7 +6,7 @@ using Umbraco.Core.Persistence.Repositories;
 using Umbraco.Web.Actions;
 using Umbraco.Web.Trees;
 
-namespace Umbraco.Community.MultilingualCleaner
+namespace Umbraco.Community.MultilingualTool
 {
      public class TreeExtensionComponent : IComponent
     {
@@ -19,27 +19,31 @@ namespace Umbraco.Community.MultilingualCleaner
         {
             int nodeId = -1;
             int.TryParse(e.NodeId, out nodeId);
-
             var permissions = sender.Services.UserService.GetPermissions(sender.Security.CurrentUser, nodeId);
-            bool isRecycleBin = nodeId.Equals(Constants.System.RecycleBinContentString);
+            bool isSystemFolder = nodeId < 0;
 
             // for all content tree nodes
-            if (!isRecycleBin
+            if (!isSystemFolder
                 && sender.TreeAlias == "content"
                 //&& sender.Security.CurrentUser.Groups.Any(x => x.Alias.InvariantEquals("admin"))
                 && permissions.Any(x => x.AssignedPermissions.Contains(ActionUpdate.ActionLetter.ToString())) )
             {
-                // creates a menu action that will open /umbraco/currentSection/itemAlias.html
-                var i = new Umbraco.Web.Models.Trees.MenuItem("multilingualCleaner", "Clear language variants...");
-                i.AdditionalData.Add("actionView", "/App_Plugins/Umbraco.Community.MultilingualCleaner/action/view.html");
-                i.Icon = "defrag";
-
-                // insert at index 5
-                //e.Menu.Items.Insert(5, i);
+                // creates a action menu item for CLEAR
+                var c = new Umbraco.Web.Models.Trees.MenuItem("multilingualToolClear", "Clear language variants...");
+                c.AdditionalData.Add("actionView", "/App_Plugins/Umbraco.Community.multilingualTool/action/clear.html");
+                c.Icon = "defrag";
                 int idx = e.Menu.Items.FindIndex(x => x.Alias.Equals("assignDomain", System.StringComparison.InvariantCultureIgnoreCase));
                 if (idx == -1)
                     idx = 6;
-                e.Menu.Items.Insert(idx+1, i);
+                e.Menu.Items.Insert(idx+1, c);
+
+                // creates a action menu item for ADD
+                var a = new Umbraco.Web.Models.Trees.MenuItem("multilingualToolAdd", "Add language variants...");
+                a.AdditionalData.Add("actionView", "/App_Plugins/Umbraco.Community.multilingualTool/action/add.html");
+                a.Icon = "defrag";
+                idx++;
+                e.Menu.Items.Insert(idx + 1, a);
+
             }
         }
 

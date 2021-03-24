@@ -122,20 +122,24 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Plugins\Umbraco.Community.MultilingualCleaner\package.manifest" />
+    <None Include="App_Plugins\Umbraco.Community.MultilingualTool\package.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="App_Plugins\Umbraco.Community.MultilingualCleaner\action\controller.js" />
-    <Content Include="App_Plugins\Umbraco.Community.MultilingualCleaner\action\view.html" />
-    <Content Include="App_Plugins\Umbraco.Community.MultilingualCleaner\resource.js" />
+    <Content Include="App_Plugins\Umbraco.Community.MultilingualTool\action\clear.controller.js" />
+    <Content Include="App_Plugins\Umbraco.Community.MultilingualTool\action\clear.html" />
+    <Content Include="App_Plugins\Umbraco.Community.MultilingualTool\resource.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)..\..\b2bconnect\dev\mockup\bin /y
-del $(SolutionDir)..\..\b2bconnect\dev\mockup\App_Plugins\Umbraco.Community.MultilingualCleaner\*.* /s /q
+del $(SolutionDir)..\..\b2bconnect\dev\mockup\App_Plugins\Umbraco.Community.MultilingualTool\*.* /s /q
 xcopy $(ProjectDir)App_Plugins\ $(SolutionDir)..\..\b2bconnect\dev\mockup\App_Plugins\ /y /s
+
+xcopy $(TargetPath) $(SolutionDir)..\..\CEV\cev-website\CEV\CEV.Web\bin /y
+del $(SolutionDir)..\..\CEV\cev-website\CEV\CEV.Web\App_Plugins\Umbraco.Community.MultilingualTool\*.* /s /q
+xcopy $(ProjectDir)App_Plugins\ $(SolutionDir)..\..\CEV\cev-website\CEV\CEV.Web\App_Plugins\ /y /s
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

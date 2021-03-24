@@ -1,7 +1,7 @@
 ﻿(function () {
     "use strict";
  
-    function Controller($scope, appState, entityResource, contentResource, navigationService, notificationsService, multilingualcleanerResource) {
+    function Controller($scope, appState, entityResource, contentResource, navigationService, notificationsService, multilingualtoolResource) {
  
         var vm = this;
         vm.variants = [];
@@ -184,5 +184,5 @@
         };
     }
  
-    angular.module("umbraco").controller("Umbraco.Community.MultilingualCleaner.Action.Controller", Controller);
+    angular.module("umbraco").controller("Umbraco.Community.MultilingualTool.Action.Controller", Controller);
 })();

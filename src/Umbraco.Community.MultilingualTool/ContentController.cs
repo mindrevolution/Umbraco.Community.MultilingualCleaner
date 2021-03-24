@@ -9,9 +9,9 @@ using Umbraco.Web;
 using Umbraco.Core.Services;
 
 
-namespace Umbraco.Community.MultilingualCleaner.Controllers
+namespace Umbraco.Community.MultilingualTool.Controllers
 {
-    [Umbraco.Web.Mvc.PluginController("MultilingualCleaner")]
+    [Umbraco.Web.Mvc.PluginController("MultilingualTool")]
     public class ContentController : UmbracoAuthorizedJsonController
     {
         private IContentService _contentService;

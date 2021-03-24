@@ -5,7 +5,7 @@ using Umbraco.Core.Mapping;
 using Umbraco.Core.Persistence.Repositories;
 using Umbraco.Web.Trees;
 
-namespace Umbraco.Community.MultilingualCleaner
+namespace Umbraco.Community.MultilingualTool
 {
     public class Composer : IUserComposer
     {
