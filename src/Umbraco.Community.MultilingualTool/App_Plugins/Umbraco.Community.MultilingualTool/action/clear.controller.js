@@ -1,7 +1,29 @@
 ﻿(function () {
     "use strict";
  
-    function Controller($scope, appState, entityResource, contentResource, navigationService, notificationsService, multilingualtoolResource) {
+    function Controller($scope, $q, appState, entityResource, contentResource, navigationService, notificationsService, multilingualtoolResource) {
+
+        const queue = [];
+        function miniQ(queue = [], concurrent = 1) {
+            this.total = queue.length;
+            this.todo = queue;
+            this.running = [];
+            this.complete = [];
+            this.count = concurrent;
+        }
+        miniQ.prototype.runNext = function () {
+            return ((this.running.length < this.count) && this.todo.length);
+        }
+        miniQ.prototype.run = function () {
+            while (this.runNext()) {
+                const promise = this.todo.shift();
+                promise.then(() => {
+                    this.complete.push(this.running.shift());
+                    this.run();
+                });
+                this.running.push(promise);
+            }
+        }
  
         var vm = this;
         vm.variants = [];
@@ -78,66 +100,9 @@
         vm.closeDialog = function () {
             navigationService.hideDialog();
         };
-      
-        vm.processNode = function () {
-            vm.done = false;
-            vm.buttonState = "busy";
-            vm.processing = true;
-            vm.progress = 0;
 
-            var _cultures = [];
-            angular.forEach(vm.variants, function (value, key) {
-                if (value.selected) {
-                    _cultures.push(value.key);
-                }
-            });
-
-            if (!vm.recursive) {
-                // - just this node ... easy! :)
-                vm.clearNode(vm.nodeId, _cultures, vm.clearAndUnpublish)
-            } else {
-                // - recursive
-                vm.clearNodeWithDescendants(vm.nodeId, _cultures, vm.clearAndUnpublish)
-            }
-
-            // - release UI
-            vm.buttonState = "success";
-            vm.processing = false;
-            vm.done = true;
-        };
-
-        vm.progressItemProcessed = function () {
-            vm.progressItems++;
-            vm.progress = Math.round(100 / vm.progressItemsTotal * vm.progressItems);
-        }
-
-        vm.progressReset = function (total) {
-            vm.progressItemsTotal = 1;
-            if (total !== undefined && total !== null) {
-                vm.progressItemsTotal = total;
-            }
-            vm.progressItems = 0;
-            vm.progress = 0;
-        }
-
-        vm.clearNodeWithDescendants = function (nodeId, cultures, unpublish) {
-            var nodesList = [];
-
-            multilingualtoolResource.getDescendantIds(nodeId).then(function (response) {
-                nodesList = response;
-
-                vm.progressReset(nodesList.length);
-                //console.log("multilingualtoolResource", nodesList);
-
-                angular.forEach(nodesList, function (node, key) {
-                    vm.clearNode(node, cultures, unpublish);
-                });
-            });
-        }
-
-        vm.clearNode = function (nodeId, cultures, unpublish) {
+        const taskClearNode = (nodeId, cultures, unpublish) => new Promise((resolve, reject) => {
             var doSave = false;
-
             //console.log("clear node", nodeId, cultures, "unpublish:" + unpublish);
 
             // - fetch node and clear it then
@@ -178,28 +143,86 @@
                                     contentResource.unpublish(nodeId)
                                         .then(function (content) {
                                             vm.progressItemProcessed();
-                                            console.debug("unpublished content", nodeId);
+                                            resolve(nodeId);
                                         }, function (err) {
                                             vm.progressItemProcessed();
-                                            console.error("unpublish failed", err, nodeId);
+                                            //reject(err);
+                                            resolve(nodeId);
                                         });
                                 } else {
                                     contentResource.publishById(nodeId)
                                         .then(function (content) {
                                             vm.progressItemProcessed();
-                                            console.debug("published content", nodeId);
+                                            resolve(nodeId);
                                         }, function (err) {
                                             vm.progressItemProcessed();
-                                            console.error("publish failed", err, nodeId);
+                                            resolve(nodeId);
                                         });
                                 }
+                            }, function (err) {
+                                vm.progressItemProcessed();
+                                console.error("MultilingualClear", "save failed", err, nodeId);
+                                resolve(nodeId);
                             });
                     } else {
                         // - we're done with that anyways :)
                         vm.progressItemProcessed();
+                        resolve(nodeId);
                     }
                 });
+        });
+
+        vm.processNode = function () {
+            vm.done = false;
+            vm.buttonState = "busy";
+            vm.processing = true;
+            vm.progress = 0;
+
+            var _cultures = [];
+            angular.forEach(vm.variants, function (value, key) {
+                if (value.selected) {
+                    _cultures.push(value.key);
+                }
+            });
+
+            if (!vm.recursive) {
+                // - just this node ... easy! :)
+                taskClearNode(vm.nodeId, _cultures, vm.clearAndUnpublish);
+            } else {
+                // - recursive
+                multilingualtoolResource.getDescendantIds(vm.nodeId).then(function (nodeIds) {
+                    vm.progressReset(nodeIds.length);
+                    //console.log("multilingualtoolResource", nodeIds);
+
+                    // - queue tasks
+                    angular.forEach(nodeIds, function (node, key) {
+                        queue.push(taskClearNode(node, _cultures, vm.clearAndUnpublish))
+                    });
+                    const tasks = new miniQ(queue);
+                    tasks.run();
+                });
+            }
+
+            // - release UI
+            vm.buttonState = "success";
+            vm.processing = false;
+            vm.done = true;
         };
+
+        vm.progressItemProcessed = function () {
+            vm.progressItems++;
+            vm.progress = Math.round(100 / vm.progressItemsTotal * vm.progressItems);
+        }
+
+        vm.progressReset = function (total) {
+            vm.progressItemsTotal = 1;
+            if (total !== undefined && total !== null) {
+                vm.progressItemsTotal = total;
+            }
+            vm.progressItems = 0;
+            vm.progress = 0;
+        }
+
     }
  
     angular.module("umbraco").controller("Umbraco.Community.MultilingualTool.Action.ClearController", Controller);
